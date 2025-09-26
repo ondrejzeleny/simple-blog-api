@@ -9,14 +9,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ArticleUpdateDto
 {
-    #[Assert\NotBlank(message: 'Title cannot be blank.')]
     #[Assert\Length(max: 255)]
-    public readonly string $title;
+    public ?string $title = null;
 
-    #[Assert\NotBlank(message: 'Content cannot be blank.')]
-    public readonly string $content;
+    public ?string $content = null;
 
-    public function __construct(string $title, string $content)
+    public function __construct(?string $title, ?string $content)
     {
         $this->title = $title;
         $this->content = $content;

@@ -9,19 +9,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class UserUpdateDto
 {
-    #[Assert\NotBlank(message: 'Email cannot be blank.')]
-    #[Assert\Email(message: 'Email is not valid.')]
-    public readonly string $email;
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Email(message: 'Email is not valid.'),
+    ])]
+    public ?string $email = null;
 
-    #[Assert\NotBlank(message: 'Name cannot be blank.')]
     #[Assert\Length(max: 255)]
-    public readonly string $name;
+    public ?string $name = null;
 
-    #[Assert\NotBlank(message: 'Role cannot be blank.')]
-    #[Assert\Choice(choices: ['admin', 'author', 'reader'], message: 'Choose a valid role: admin, author, or reader.')]
-    public readonly string $role;
+    #[Assert\AtLeastOneOf([
+        new Assert\IsNull(),
+        new Assert\Choice(choices: ['admin', 'author', 'reader'], message: 'Choose a valid role: admin, author, or reader.'),
+    ])]
+    public ?string $role = null;
 
-    public function __construct(string $email, string $name, string $role)
+    public function __construct(?string $email, ?string $name, ?string $role)
     {
         $this->email = $email;
         $this->name = $name;

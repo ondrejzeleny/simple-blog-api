@@ -62,9 +62,17 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function update(User $user, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
     {
-        $user->setName($dto->name);
-        $user->setEmail($dto->email);
-        $user->setRole($this->roleConverter->toSystemRole($dto->role));
+        if (!is_null($dto->name)) {
+            $user->setName($dto->name);
+        }
+
+        if (!is_null($dto->email)) {
+            $user->setEmail($dto->email);
+        }
+
+        if (!is_null($dto->role)) {
+            $user->setRole($this->roleConverter->toSystemRole($dto->role));
+        }
 
         $this->entityManager->flush();
 

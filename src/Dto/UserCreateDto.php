@@ -12,19 +12,19 @@ class UserCreateDto
 {
     #[Assert\NotBlank(message: 'Email cannot be blank.')]
     #[Assert\Email(message: 'Email is not valid.')]
-    public readonly string $email;
+    public string $email;
 
     #[Assert\NotBlank(message: 'Password cannot be blank.')]
     #[PasswordStrength(minScore: PasswordStrength::STRENGTH_WEAK, message: 'Use a stronger password.')]
-    public readonly string $password;
+    public string $password;
 
     #[Assert\NotBlank(message: 'Name cannot be blank.')]
     #[Assert\Length(max: 255)]
-    public readonly string $name;
+    public string $name;
 
     #[Assert\NotBlank(message: 'Role cannot be blank.')]
     #[Assert\Choice(choices: ['admin', 'author', 'reader'], message: 'Choose a valid role: admin, author, or reader.')]
-    public readonly string $role;
+    public string $role;
 
     public function __construct(string $email, string $password, string $name, string $role)
     {

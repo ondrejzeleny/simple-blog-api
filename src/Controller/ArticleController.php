@@ -63,9 +63,21 @@ class ArticleController extends AbstractController
     #[IsGranted(ArticleVoter::EDIT, subject: 'article')]
     public function update(Article $article, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
     {
-        $article->setTitle($dto->title);
-        $article->setContent($dto->content);
-        $article->setUpdatedAt(new \DateTimeImmutable());
+        $isUpdated = false;
+
+        if (!is_null($dto->title)) {
+            $article->setTitle($dto->title);
+            $isUpdated = true;
+        }
+
+        if (!is_null($dto->content)) {
+            $article->setContent($dto->content);
+            $isUpdated = true;
+        }
+
+        if ($isUpdated) {
+            $article->setUpdatedAt(new \DateTimeImmutable());
+        }
 
         $this->entityManager->flush();
 
