@@ -26,7 +26,6 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/api/articles', name: 'api_article_index', methods: ['GET'])]
-    #[IsGranted(ArticleVoter::VIEW, subject: 'article')]
     public function index(ArticleRepository $articleRepository): JsonResponse
     {
         $articles = $articleRepository->findAll();

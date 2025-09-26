@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +12,11 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class AuthLoginController extends AbstractController
 {
+    public function __construct(
+        private readonly JWTTokenManagerInterface $JWTManager,
+    ) {
+    }
+
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function index(#[CurrentUser] ?User $user): JsonResponse
     {
@@ -18,7 +24,7 @@ class AuthLoginController extends AbstractController
             return $this->json(['message' => 'Missing credentials'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $token = '';
+        $token = $this->JWTManager->create($user);
 
         return $this->json([
             'user' => $user->getUserIdentifier(),
