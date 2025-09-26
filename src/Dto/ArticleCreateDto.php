@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * DTO for creating a new article.
  */
-final class ArticleCreateDto
+class ArticleCreateDto
 {
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]

@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * DTO for updating an existing user.
  */
-final class UserUpdateDto
+class UserUpdateDto
 {
     #[Assert\NotBlank]
     #[Assert\Email]

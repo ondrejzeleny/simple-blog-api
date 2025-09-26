@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * DTO for creating a new user.
  */
-final class UserCreateDto
+class UserCreateDto
 {
     #[Assert\NotBlank]
     #[Assert\Email]

@@ -17,9 +17,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/api/users')]
-#[IsGranted('ROLE_ADMIN')]
-final class UserController extends AbstractController
+class UserController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -29,7 +27,8 @@ final class UserController extends AbstractController
     ) {
     }
 
-    #[Route('', name: 'api_user_index', methods: ['GET'])]
+    #[Route('/api/users', name: 'api_user_index', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): JsonResponse
     {
         $users = $userRepository->findAll();
@@ -38,13 +37,15 @@ final class UserController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{id}', name: 'api_user_show', methods: ['GET'])]
+    #[Route('/api/users/{id}', name: 'api_user_show', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function show(User $user): JsonResponse
     {
         return $this->json($this->userTransformer->transform($user));
     }
 
-    #[Route('', name: 'api_user_create', methods: ['POST'])]
+    #[Route('/api/users', name: 'api_user_create', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(#[MapRequestPayload] UserCreateDto $dto): JsonResponse
     {
         $user = new User($dto->name, $dto->email);
@@ -57,7 +58,8 @@ final class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user), Response::HTTP_CREATED);
     }
 
-    #[Route('/{id}', name: 'api_user_update', methods: ['PUT'])]
+    #[Route('/api/users/{id}', name: 'api_user_update', methods: ['PUT'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function update(User $user, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
     {
         $user->setName($dto->name);
@@ -69,7 +71,8 @@ final class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user));
     }
 
-    #[Route('/{id}', name: 'api_user_delete', methods: ['DELETE'])]
+    #[Route('/api/users/{id}', name: 'api_user_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(User $user): JsonResponse
     {
         if (!$user->getArticles()->isEmpty()) {

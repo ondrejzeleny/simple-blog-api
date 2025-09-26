@@ -17,8 +17,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/api/articles')]
-final class ArticleController extends AbstractController
+class ArticleController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -26,7 +25,8 @@ final class ArticleController extends AbstractController
     ) {
     }
 
-    #[Route('', name: 'api_article_index', methods: ['GET'])]
+    #[Route('/api/articles', name: 'api_article_index', methods: ['GET'])]
+    #[IsGranted(ArticleVoter::VIEW, subject: 'article')]
     public function index(ArticleRepository $articleRepository): JsonResponse
     {
         $articles = $articleRepository->findAll();
@@ -35,14 +35,14 @@ final class ArticleController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/{id}', name: 'api_article_show', methods: ['GET'])]
+    #[Route('/api/articles/{id}', name: 'api_article_show', methods: ['GET'])]
     #[IsGranted(ArticleVoter::VIEW, subject: 'article')]
     public function show(Article $article): JsonResponse
     {
         return $this->json($this->articleTransformer->transform($article));
     }
 
-    #[Route('', name: 'api_article_create', methods: ['POST'])]
+    #[Route('/api/articles', name: 'api_article_create', methods: ['POST'])]
     #[IsGranted(ArticleVoter::CREATE, subject: Article::class)]
     public function create(#[MapRequestPayload] ArticleCreateDto $dto): JsonResponse
     {
@@ -60,7 +60,7 @@ final class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article), Response::HTTP_CREATED);
     }
 
-    #[Route('/{id}', name: 'api_article_update', methods: ['PUT'])]
+    #[Route('/api/articles/{id}', name: 'api_article_update', methods: ['PUT'])]
     #[IsGranted(ArticleVoter::EDIT, subject: 'article')]
     public function update(Article $article, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
     {
@@ -73,7 +73,7 @@ final class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article));
     }
 
-    #[Route('/{id}', name: 'api_article_delete', methods: ['DELETE'])]
+    #[Route('/api/articles/{id}', name: 'api_article_delete', methods: ['DELETE'])]
     #[IsGranted(ArticleVoter::DELETE, subject: 'article')]
     public function delete(Article $article): JsonResponse
     {
