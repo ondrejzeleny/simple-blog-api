@@ -16,8 +16,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class ArticleVoter extends Voter
 {
-    public const EDIT = 'edit';
-    public const DELETE = 'delete';
+    public const EDIT = 'ARTICLE_EDIT';
+    public const DELETE = 'ARTICLE_DELETE';
 
     /**
      * Create voter.

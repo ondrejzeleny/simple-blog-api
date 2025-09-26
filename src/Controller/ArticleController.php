@@ -25,6 +25,7 @@ class ArticleController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ArticleTransformer $articleTransformer,
+        private readonly ArticleRepository $articleRepository,
     ) {
     }
 
@@ -33,9 +34,9 @@ class ArticleController extends AbstractController
      */
     #[Route('/articles', name: 'api_article_index', methods: ['GET'])]
     #[IsGranted('ROLE_READER')]
-    public function index(ArticleRepository $articleRepository): JsonResponse
+    public function index(): JsonResponse
     {
-        $articles = $articleRepository->findAll();
+        $articles = $this->articleRepository->findAll();
         $data = array_map([$this->articleTransformer, 'transform'], $articles);
 
         return $this->json($data);
@@ -46,8 +47,13 @@ class ArticleController extends AbstractController
      */
     #[Route('/articles/{id}', name: 'api_article_show', methods: ['GET'])]
     #[IsGranted('ROLE_READER')]
-    public function show(Article $article): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $article = $this->articleRepository->find($id);
+        if (!$article) {
+            return $this->json(['error' => 'Article not found.'], Response::HTTP_NOT_FOUND);
+        }
+
         return $this->json($this->articleTransformer->transform($article));
     }
 
@@ -76,9 +82,17 @@ class ArticleController extends AbstractController
      * Update article.
      */
     #[Route('/articles/{id}', name: 'api_article_update', methods: ['PUT'])]
-    #[IsGranted(ArticleVoter::EDIT, subject: 'article')]
-    public function update(Article $article, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
+    #[IsGranted('ROLE_AUTHOR')]
+    public function update(int $id, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
     {
+        $article = $this->articleRepository->find($id);
+        if (!$article) {
+            return $this->json(['error' => 'Article not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Authorize if user is the author
+        $this->denyAccessUnlessGranted(ArticleVoter::EDIT, $article);
+
         $isUpdated = false;
 
         if (!is_null($dto->title)) {
@@ -104,9 +118,17 @@ class ArticleController extends AbstractController
      * Delete article.
      */
     #[Route('/articles/{id}', name: 'api_article_delete', methods: ['DELETE'])]
-    #[IsGranted(ArticleVoter::DELETE, subject: 'article')]
-    public function delete(Article $article): JsonResponse
+    #[IsGranted('ROLE_AUTHOR')]
+    public function delete(int $id): JsonResponse
     {
+        $article = $this->articleRepository->find($id);
+        if (!$article) {
+            return $this->json(['error' => 'Article not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Authorize if user is the author
+        $this->denyAccessUnlessGranted(ArticleVoter::DELETE, $article);
+
         $this->entityManager->remove($article);
         $this->entityManager->flush();
 
