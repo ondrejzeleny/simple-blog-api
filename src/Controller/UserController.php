@@ -27,7 +27,7 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route('/api/users', name: 'api_user_index', methods: ['GET'])]
+    #[Route('/users', name: 'api_user_index', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): JsonResponse
     {
@@ -37,14 +37,14 @@ class UserController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/users/{id}', name: 'api_user_show', methods: ['GET'])]
+    #[Route('/users/{id}', name: 'api_user_show', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function show(User $user): JsonResponse
     {
         return $this->json($this->userTransformer->transform($user));
     }
 
-    #[Route('/api/users', name: 'api_user_create', methods: ['POST'])]
+    #[Route('/users', name: 'api_user_create', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(#[MapRequestPayload] UserCreateDto $dto): JsonResponse
     {
@@ -58,7 +58,7 @@ class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user), Response::HTTP_CREATED);
     }
 
-    #[Route('/api/users/{id}', name: 'api_user_update', methods: ['PUT'])]
+    #[Route('/users/{id}', name: 'api_user_update', methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(User $user, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
     {
@@ -79,7 +79,7 @@ class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user));
     }
 
-    #[Route('/api/users/{id}', name: 'api_user_delete', methods: ['DELETE'])]
+    #[Route('/users/{id}', name: 'api_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(User $user): JsonResponse
     {

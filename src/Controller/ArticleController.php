@@ -25,7 +25,7 @@ class ArticleController extends AbstractController
     ) {
     }
 
-    #[Route('/api/articles', name: 'api_article_index', methods: ['GET'])]
+    #[Route('/articles', name: 'api_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): JsonResponse
     {
         $articles = $articleRepository->findAll();
@@ -34,14 +34,14 @@ class ArticleController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/articles/{id}', name: 'api_article_show', methods: ['GET'])]
+    #[Route('/articles/{id}', name: 'api_article_show', methods: ['GET'])]
     #[IsGranted(ArticleVoter::VIEW, subject: 'article')]
     public function show(Article $article): JsonResponse
     {
         return $this->json($this->articleTransformer->transform($article));
     }
 
-    #[Route('/api/articles', name: 'api_article_create', methods: ['POST'])]
+    #[Route('/articles', name: 'api_article_create', methods: ['POST'])]
     #[IsGranted(ArticleVoter::CREATE, subject: Article::class)]
     public function create(#[MapRequestPayload] ArticleCreateDto $dto): JsonResponse
     {
@@ -59,7 +59,7 @@ class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article), Response::HTTP_CREATED);
     }
 
-    #[Route('/api/articles/{id}', name: 'api_article_update', methods: ['PUT'])]
+    #[Route('/articles/{id}', name: 'api_article_update', methods: ['PUT'])]
     #[IsGranted(ArticleVoter::EDIT, subject: 'article')]
     public function update(Article $article, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
     {
@@ -84,7 +84,7 @@ class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article));
     }
 
-    #[Route('/api/articles/{id}', name: 'api_article_delete', methods: ['DELETE'])]
+    #[Route('/articles/{id}', name: 'api_article_delete', methods: ['DELETE'])]
     #[IsGranted(ArticleVoter::DELETE, subject: 'article')]
     public function delete(Article $article): JsonResponse
     {
