@@ -27,6 +27,7 @@ class UserController extends AbstractController
         private readonly UserTransformer $userTransformer,
         private readonly RoleConverter $roleConverter,
         private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly UserRepository $userRepository,
     ) {
     }
 
@@ -48,8 +49,14 @@ class UserController extends AbstractController
      */
     #[Route('/users/{id}', name: 'api_user_show', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function show(User $user): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $user = $this->userRepository->find($id);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
+        }
+
         return $this->json($this->userTransformer->transform($user));
     }
 
@@ -75,8 +82,14 @@ class UserController extends AbstractController
      */
     #[Route('/users/{id}', name: 'api_user_update', methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function update(User $user, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
+    public function update(int $id, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
     {
+        $user = $this->userRepository->find($id);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
+        }
+
         if (!is_null($dto->name)) {
             $user->setName($dto->name);
         }
@@ -99,8 +112,14 @@ class UserController extends AbstractController
      */
     #[Route('/users/{id}', name: 'api_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(User $user): JsonResponse
+    public function delete(int $id): JsonResponse
     {
+        $user = $this->userRepository->find($id);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
+        }
+
         if (!$user->getArticles()->isEmpty()) {
             return $this->json(['error' => 'Cannot delete user with articles.'], Response::HTTP_CONFLICT);
         }
