@@ -90,7 +90,7 @@ class ArticleController extends AbstractController
             return $this->json(['error' => 'Article not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        // Authorize if user is the author
+        // Authorize if user is the author of the article
         $this->denyAccessUnlessGranted(ArticleVoter::EDIT, $article);
 
         $isUpdated = false;
@@ -126,7 +126,7 @@ class ArticleController extends AbstractController
             return $this->json(['error' => 'Article not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        // Authorize if user is the author
+        // Authorize if user is the author of the article
         $this->denyAccessUnlessGranted(ArticleVoter::DELETE, $article);
 
         $this->entityManager->remove($article);

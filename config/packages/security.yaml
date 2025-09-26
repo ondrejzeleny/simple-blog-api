@@ -32,9 +32,10 @@ security:
         # - { path: ^/articles, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_READER:    ROLE_USER
-        ROLE_AUTHOR:    ROLE_READER
-        ROLE_ADMIN:     ROLE_AUTHOR
+        ROLE_ADMIN: [ROLE_AUTHOR]
+        ROLE_AUTHOR: [ROLE_READER]
+        ROLE_READER: [ROLE_USER]
+        
 
 when@test:
     security:
