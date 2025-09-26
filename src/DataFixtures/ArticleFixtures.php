@@ -9,8 +9,14 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
+/**
+ * Fixtures for articles.
+ */
 class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
+    /**
+     * Load article fixtures.
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('cs_CZ');
@@ -40,6 +46,8 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
+     * Get fixture dependencies.
+     *
      * @return string[]
      */
     public function getDependencies(): array

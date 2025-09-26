@@ -17,6 +17,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Controller for managing users.
+ */
 class UserController extends AbstractController
 {
     public function __construct(
@@ -27,6 +30,9 @@ class UserController extends AbstractController
     ) {
     }
 
+    /**
+     * Get all users.
+     */
     #[Route('/users', name: 'api_user_index', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): JsonResponse
@@ -37,6 +43,9 @@ class UserController extends AbstractController
         return $this->json($data);
     }
 
+    /**
+     * Get single user.
+     */
     #[Route('/users/{id}', name: 'api_user_show', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     public function show(User $user): JsonResponse
@@ -44,6 +53,9 @@ class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user));
     }
 
+    /**
+     * Create new user.
+     */
     #[Route('/users', name: 'api_user_create', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(#[MapRequestPayload] UserCreateDto $dto): JsonResponse
@@ -58,6 +70,9 @@ class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user), Response::HTTP_CREATED);
     }
 
+    /**
+     * Update user.
+     */
     #[Route('/users/{id}', name: 'api_user_update', methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(User $user, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
@@ -79,6 +94,9 @@ class UserController extends AbstractController
         return $this->json($this->userTransformer->transform($user));
     }
 
+    /**
+     * Delete user.
+     */
     #[Route('/users/{id}', name: 'api_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(User $user): JsonResponse

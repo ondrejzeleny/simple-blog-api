@@ -5,7 +5,7 @@ namespace App\Transformer;
 use App\Entity\Article;
 
 /**
- * Tranforms Article object to array.
+ * Transformer for Article entity.
  */
 class ArticleTransformer implements TransformerInterface
 {

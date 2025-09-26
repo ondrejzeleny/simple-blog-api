@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * User entity.
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -51,16 +54,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->articles = new ArrayCollection();
     }
 
+    /**
+     * Get user ID.
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * Get user email.
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * Set user email.
+     */
     public function setEmail(string $email): static
     {
         if ('' === trim($email)) {
@@ -73,6 +85,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Get user identifier.
+     *
      * @return non-empty-string
      */
     public function getUserIdentifier(): string
@@ -85,7 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
+     * Get user roles.
      */
     public function getRoles(): array
     {
@@ -95,11 +109,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         ];
     }
 
+    /**
+     * Get user role.
+     */
     public function getRole(): string
     {
         return $this->role;
     }
 
+    /**
+     * Set user role.
+     */
     public function setRole(string $role): static
     {
         $this->role = $role;
@@ -108,13 +128,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * Get user password.
      */
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    /**
+     * Set user password.
+     */
     public function setPassword(string $password): static
     {
         $this->password = $password;
@@ -139,11 +162,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
+    /**
+     * Get user name.
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * Set user name.
+     */
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -152,6 +181,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Get user articles.
+     *
      * @return Collection<int, Article>
      */
     public function getArticles(): Collection
@@ -159,6 +190,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->articles;
     }
 
+    /**
+     * Add article to user.
+     */
     public function addArticle(Article $article): static
     {
         if (!$this->articles->contains($article)) {
@@ -169,6 +203,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Remove article from user.
+     */
     public function removeArticle(Article $article): static
     {
         $this->articles->removeElement($article);

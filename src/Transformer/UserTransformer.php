@@ -10,6 +10,9 @@ use App\Service\RoleConverter;
  */
 class UserTransformer implements TransformerInterface
 {
+    /**
+     * Create transformer.
+     */
     public function __construct(
         public RoleConverter $roleConverter,
     ) {

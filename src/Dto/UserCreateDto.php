@@ -26,6 +26,9 @@ class UserCreateDto
     #[Assert\Choice(choices: ['admin', 'author', 'reader'], message: 'Choose a valid role: admin, author, or reader.')]
     public string $role;
 
+    /**
+     * Create DTO.
+     */
     public function __construct(string $email, string $password, string $name, string $role)
     {
         $this->email = $email;

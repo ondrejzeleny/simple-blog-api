@@ -15,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * Controller for user registration.
+ */
 class AuthRegisterController extends AbstractController
 {
     public function __construct(
@@ -25,6 +28,8 @@ class AuthRegisterController extends AbstractController
     }
 
     /**
+     * Register new user.
+     *
      * @param UserProviderInterface<User> $userProvider
      */
     #[Route('/auth/register', name: 'api_auth_register', methods: ['POST'])]

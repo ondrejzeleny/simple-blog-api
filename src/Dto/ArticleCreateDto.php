@@ -16,6 +16,9 @@ class ArticleCreateDto
     #[Assert\NotBlank(message: 'Content cannot be blank.')]
     public string $content;
 
+    /**
+     * Create DTO.
+     */
     public function __construct(string $title, string $content)
     {
         $this->title = $title;

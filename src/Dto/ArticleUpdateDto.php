@@ -14,6 +14,9 @@ class ArticleUpdateDto
 
     public ?string $content = null;
 
+    /**
+     * Create DTO.
+     */
     public function __construct(?string $title, ?string $content)
     {
         $this->title = $title;

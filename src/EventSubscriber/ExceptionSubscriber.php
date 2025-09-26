@@ -8,8 +8,14 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * Subscriber for handling exceptions.
+ */
 class ExceptionSubscriber implements EventSubscriberInterface
 {
+    /**
+     * Get subscribed events.
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -17,6 +23,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Handle kernel exception.
+     */
     public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();

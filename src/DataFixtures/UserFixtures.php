@@ -9,18 +9,27 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * Fixtures for users.
+ */
 class UserFixtures extends Fixture
 {
     public const ADMIN_USER_REFERENCE = 'admin-user';
     public const AUTHOR_USER_REFERENCE = 'author-user';
     public const READER_USER_REFERENCE = 'reader-user';
 
+    /**
+     * Create fixtures.
+     */
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly RoleConverter $roleConverter,
     ) {
     }
 
+    /**
+     * Load user fixtures.
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('cs_CZ');

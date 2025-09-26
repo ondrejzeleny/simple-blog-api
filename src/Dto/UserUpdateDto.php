@@ -24,6 +24,9 @@ class UserUpdateDto
     ])]
     public ?string $role = null;
 
+    /**
+     * Create DTO.
+     */
     public function __construct(?string $email, ?string $name, ?string $role)
     {
         $this->email = $email;

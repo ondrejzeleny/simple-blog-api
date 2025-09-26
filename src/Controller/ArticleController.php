@@ -17,6 +17,9 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Controller for managing articles.
+ */
 class ArticleController extends AbstractController
 {
     public function __construct(
@@ -25,6 +28,9 @@ class ArticleController extends AbstractController
     ) {
     }
 
+    /**
+     * Get all articles.
+     */
     #[Route('/articles', name: 'api_article_index', methods: ['GET'])]
     #[IsGranted('ROLE_READER')]
     public function index(ArticleRepository $articleRepository): JsonResponse
@@ -35,6 +41,9 @@ class ArticleController extends AbstractController
         return $this->json($data);
     }
 
+    /**
+     * Get single article.
+     */
     #[Route('/articles/{id}', name: 'api_article_show', methods: ['GET'])]
     #[IsGranted('ROLE_READER')]
     public function show(Article $article): JsonResponse
@@ -42,6 +51,9 @@ class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article));
     }
 
+    /**
+     * Create new article.
+     */
     #[Route('/articles', name: 'api_article_create', methods: ['POST'])]
     #[IsGranted('ROLE_AUTHOR')]
     public function create(#[MapRequestPayload] ArticleCreateDto $dto): JsonResponse
@@ -60,6 +72,9 @@ class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article), Response::HTTP_CREATED);
     }
 
+    /**
+     * Update article.
+     */
     #[Route('/articles/{id}', name: 'api_article_update', methods: ['PUT'])]
     #[IsGranted(ArticleVoter::EDIT, subject: 'article')]
     public function update(Article $article, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
@@ -85,6 +100,9 @@ class ArticleController extends AbstractController
         return $this->json($this->articleTransformer->transform($article));
     }
 
+    /**
+     * Delete article.
+     */
     #[Route('/articles/{id}', name: 'api_article_delete', methods: ['DELETE'])]
     #[IsGranted(ArticleVoter::DELETE, subject: 'article')]
     public function delete(Article $article): JsonResponse
