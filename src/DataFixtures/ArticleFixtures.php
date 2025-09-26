@@ -19,7 +19,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         $authorUser = $this->getReference(UserFixtures::AUTHOR_USER_REFERENCE, User::class);
 
         // Admin articles
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $article = new Article();
             $article->setTitle($faker->sentence(6));
             $article->setContent($faker->paragraph());
@@ -28,7 +28,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         }
 
         // Author articles
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $article = new Article();
             $article->setTitle($faker->sentence(6));
             $article->setContent($faker->paragraph());

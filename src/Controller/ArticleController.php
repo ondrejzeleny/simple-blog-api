@@ -26,6 +26,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles', name: 'api_article_index', methods: ['GET'])]
+    #[IsGranted('ROLE_READER')]
     public function index(ArticleRepository $articleRepository): JsonResponse
     {
         $articles = $articleRepository->findAll();
@@ -35,14 +36,14 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles/{id}', name: 'api_article_show', methods: ['GET'])]
-    #[IsGranted(ArticleVoter::VIEW, subject: 'article')]
+    #[IsGranted('ROLE_READER')]
     public function show(Article $article): JsonResponse
     {
         return $this->json($this->articleTransformer->transform($article));
     }
 
     #[Route('/articles', name: 'api_article_create', methods: ['POST'])]
-    #[IsGranted(ArticleVoter::CREATE, subject: Article::class)]
+    #[IsGranted('ROLE_AUTHOR')]
     public function create(#[MapRequestPayload] ArticleCreateDto $dto): JsonResponse
     {
         /** @var User $user */
