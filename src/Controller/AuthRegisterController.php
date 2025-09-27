@@ -24,8 +24,6 @@ class AuthRegisterController extends AbstractController
 
     /**
      * Register new user.
-     *
-     * @param UserProviderInterface<User> $userProvider
      */
     #[Route('/auth/register', name: 'api_auth_register', methods: ['POST'])]
     public function register(#[MapRequestPayload] UserCreateDto $dto): JsonResponse
