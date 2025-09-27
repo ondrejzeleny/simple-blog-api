@@ -291,11 +291,11 @@ docker compose exec server php bin/console doctrine:fixtures:load --env=test
 
 ### Spuštění testů
 ```bash
-# Spusťte všechny testy
-docker compose exec server php bin/phpunit tests
+# Spusťte všechny Unit testy
+docker compose exec server php bin/phpunit tests/Unit
 
-# Spusťte testy s podrobnějším výstupem
-docker compose exec server php bin/phpunit tests --verbose
+# Spusťte všechny Integrační testy
+docker compose exec server php bin/phpunit tests/Integration
 ```
 
 ## Kvalita kódu
@@ -304,6 +304,8 @@ docker compose exec server php bin/phpunit tests --verbose
 ```bash
 # Spuštění PHPStan level 10
 docker compose exec server php ./vendor/bin/phpstan analyse src --level 10
+# Testy splňují PHPStan level 8
+docker compose exec server php ./vendor/bin/phpstan analyse tests --level 8
 ```
 
 Aplikace odpovídá PHPStan level 10 bez chyb.
