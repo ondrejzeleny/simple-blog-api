@@ -1,7 +1,14 @@
-# Simple API blog
-- Webová aplikace poskutující ukázku API pro blog
-- Aplikace je postavená na Symfony a Doctrine
-- Aplikaci lze spustit v Docker containeru, který obsahuje 3 služby: php-apache, mysql a phpmyadmin
+# Simple Blog API
+
+REST API pro správu blogu postavené na Symfony frameworku s Doctrine ORM. Aplikace poskytuje kompletní CRUD operace pro články a uživatele s role-based přístupem.
+
+## Funkce
+- **Autentizace a autorizace** - JWT token based autentizace s role-based přístupem
+- **Správa uživatelů** - CRUD operace pro uživatele (pouze admin)
+- **Správa článků** - CRUD operace pro články s vlastnickými právy
+- **Role systém** - Admin, Author, Reader s různými oprávněními
+- **Validace dat** - Symfony Validator pro vstupní data
+- **Testy** - PHPUnit testy s testovací databází
 
 ## Požadavky
 - PHP 8.2
@@ -9,37 +16,312 @@
 - Docker (včetně docker compose)
 
 ## Spuštění
-- Stáněte si projekt a otevřete složku projektu
-- Nainstalujte composer závislosti `composer install`
-- Zkopírujte soubor `cp .env.example .env.local`
-- Zkopírujte soubor `cp .env.test.example .env.test.local`
-- Zkontrolujte a případně upravte v souboru .env.local a .env.test.local připojení k DB dle compose.yaml
-- Spusťte Docker `docker compose up -d --build`
-- Vytvořte novou databázi `docker compose exec server php bin/console doctrine:database:create --if-not-exists`
-- Spusťte migraci databáze `docker compose exec server php bin/console doctrine:migrations:migrate`
-- Vygenerujte JWT SSH keys `docker compose exec server php bin/console lexik:jwt:generate-keypair`
-- Připravte testovací data `docker compose exec server php bin/console doctrine:fixtures:load`
 
-## Poznámky
-- Po spuštění běží aplikace na `http://localhost:8002`
-- Endpointy jsou zabezpečené, je třeba je volat s autorizační hlavičkou `Bearer JWT_TOKEN`
-- JWT token získáte přihlášením na endpointu /auth/login
+### 1. Příprava prostředí
+```bash
+# Stáhněte si projekt a otevřete složku projektu
+git clone <repository-url>
+cd simple-blog-api
 
-## Endpointy
-- TODO
+# Nainstalujte composer závislosti
+composer install
+
+# Zkopírujte konfigurační soubory
+cp .env.example .env.local
+cp .env.test.example .env.test.local
+```
+
+### 2. Spuštění Docker kontejnerů
+```bash
+# Spusťte Docker kontejnery
+docker compose up -d --build
+```
+
+### 3. Inicializace databáze
+```bash
+# Vytvořte databázi
+docker compose exec server php bin/console doctrine:database:create --if-not-exists
+
+# Spusťte migrace
+docker compose exec server php bin/console doctrine:migrations:migrate
+
+# Vygenerujte JWT SSH klíče
+docker compose exec server php bin/console lexik:jwt:generate-keypair
+
+# Načtěte testovací data
+docker compose exec server php bin/console doctrine:fixtures:load
+```
+
+### 4. Ověření spuštění
+Aplikace běží na `http://localhost:8002`
+
+## Autentizace
+
+Všechny endpointy (kromě registrace a přihlášení) vyžadují JWT token v hlavičce:
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+JWT token získáte přihlášením na endpointu `/auth/login`.
+
+## API Endpointy
+
+### Registrace a přihlášení
+
+#### POST /auth/register
+Registrace nového uživatele.
+
+**Request Body:**
+```json
+{
+    "email": "user@example.com",
+    "password": "password123",
+    "name": "John Doe",
+    "role": "reader"
+}
+```
+
+**Response:**
+```json
+{
+    "message": "User registered successfully."
+}
+```
+
+#### POST /auth/login
+Přihlášení uživatele, vrací JWT token.
+
+**Request Body:**
+```json
+{
+    "email": "user@example.com",
+    "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+}
+```
+
+### Správa uživatelů (pouze pro admin)
+
+#### GET /users
+Seznam všech uživatelů.
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+**Response:**
+```json
+[
+    {
+        "id": 1,
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "role": "admin"
+    }
+]
+```
+
+#### GET /users/{id}
+Získání dat o konkrétním uživateli.
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+#### POST /users
+Vytvoření nového uživatele.
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+**Request Body:**
+```json
+{
+    "email": "newuser@example.com",
+    "password": "password123",
+    "name": "New User",
+    "role": "author"
+}
+```
+
+#### PUT /users/{id}
+Úprava uživatele.
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+**Request Body:**
+```json
+{
+    "email": "updated@example.com",
+    "name": "Updated Name",
+    "role": "author"
+}
+```
+
+#### DELETE /users/{id}
+Smazání uživatele.
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+### Správa článků
+
+#### GET /articles
+Seznam všech článků.
+
+**Role:** Reader, Author, Admin
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+**Response:**
+```json
+[
+    {
+        "id": 1,
+        "title": "Article Title",
+        "content": "Article content...",
+        "author_id": 1,
+        "created_at": "2024-01-01 12:00:00",
+        "updated_at": "2024-01-01 12:00:00"
+    }
+]
+```
+
+#### GET /articles/{id}
+Získání článku podle ID.
+
+**Role:** Reader, Author, Admin
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+#### POST /articles
+Vytvoření nového článku.
+
+**Role:** Author, Admin
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+**Request Body:**
+```json
+{
+    "title": "New Article",
+    "content": "Article content..."
+}
+```
+
+#### PUT /articles/{id}
+Úprava článku.
+
+**Role:** Author (vlastník článku), Admin
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+**Request Body:**
+```json
+{
+    "title": "Updated Title",
+    "content": "Updated content..."
+}
+```
+
+#### DELETE /articles/{id}
+Smazání článku.
+
+**Role:** Author (vlastník článku), Admin
+
+**Headers:**
+```
+Authorization: Bearer {JWT_TOKEN}
+```
+
+## Role a oprávnění
+
+- **Admin** - plný přístup ke všem operacím
+- **Author** - může vytvářet a upravovat vlastní články
+- **Reader** - může pouze číst články
+
+## Testovací uživatelé
+
+Po načtení fixtures jsou k dispozici tyto testovací účty:
+
+- **Admin**: `admin@example.com` / `password1`
+- **Author**: `author@example.com` / `password2`  
+- **Reader**: `reader@example.com` / `password3`
 
 ## Testy
-- Projekt musí být spuštěný
-- Připravte testovací databázi `docker compose exec server php bin/console doctrine:database:create --env=test`
-- Vygenerujte schéma `docker compose exec server php bin/console doctrine:schema:create --env=test`
-- Připravte testovací data `docker compose exec server php bin/console doctrine:fixtures:load --env=test`
-- Ukázkové testy můžete spustit pomocí `docker compose exec server php bin/phpunit tests`
 
-## PHP stan
-- Pro spuštění PHP stan level 10 zavolejte `php ./vendor/bin/phpstan analyse src --level 10`
-- Aplikace odpovídá PHP stan level 10
+### Příprava testovacího prostředí
+```bash
+# Vytvořte testovací databázi
+docker compose exec server php bin/console doctrine:database:create --env=test
 
-## Možné zlepšení
-- API rate limiter
-- Více testů
-- API start a limit parametr nebo pagination
+# Vygenerujte schéma
+docker compose exec server php bin/console doctrine:schema:create --env=test
+
+# Načtěte testovací data
+docker compose exec server php bin/console doctrine:fixtures:load --env=test
+```
+
+### Spuštění testů
+```bash
+# Spusťte všechny testy
+docker compose exec server php bin/phpunit tests
+
+# Spusťte testy s podrobnějším výstupem
+docker compose exec server php bin/phpunit tests --verbose
+```
+
+## Kvalita kódu
+
+### PHPStan
+```bash
+# Spuštění PHPStan level 10
+docker compose exec server php ./vendor/bin/phpstan analyse src --level 10
+```
+
+Aplikace odpovídá PHPStan level 10 bez chyb.
+
+## Technologie
+
+- **Framework**: Symfony 7.x
+- **ORM**: Doctrine ORM
+- **Autentizace**: JWT (LexikJWTAuthenticationBundle)
+- **Validace**: Symfony Validator
+- **Testování**: PHPUnit
+- **Kvalita kódu**: PHPStan
+- **Kontejnerizace**: Docker + Docker Compose
+
+## Možná vylepšení
+
+- **API Rate Limiting** - omezení počtu požadavků
+- **Pagination** - stránkování pro seznamy
+- **API Documentation** - OpenAPI/Swagger dokumentace
+- **Caching** - Redis cache pro výkon
+- **Produkce** - příprava na spuštění v produkci
