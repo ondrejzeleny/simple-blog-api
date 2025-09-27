@@ -325,12 +325,10 @@ Testy odpovídají PHPStan level 8.
 - **Kontejnerizace**: Docker + Docker Compose
 
 ## Možná vylepšení
-
+- **Enum role** - oddělit role do Enumu a s tím související refactoring
+- **Error responses** - samostatná služba zajišťující jednoté error responses
+- **Errog handling** - lepší a jednoznačnější error hlášky
+- **Práce s účty** - schvalování účtů, logout endpoint atd.
 - **API Rate Limiting** - omezení počtu požadavků
-- **Pagination** - stránkování pro seznamy
-- **Error responses** - Samostatná služba zajišťující jednoté error responses
-- **Errog handling** - Lepší error hlášky
-- **Práce s účty** - Schvalování účtů atd.
-- **Logout** - Endpoint po odhlášení
-- **API Documentation** - OpenAPI/Swagger dokumentace
+- **Pagination** - stránkování pro seznamy, pro větší množství dat
 - **Produkce** - příprava na spuštění v produkci
