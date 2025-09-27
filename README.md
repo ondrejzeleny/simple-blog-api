@@ -294,6 +294,7 @@ docker compose up -d --build
 docker compose exec server php bin/console doctrine:database:create --env=test
 docker compose exec server php bin/console doctrine:schema:create --env=test
 docker compose exec server php bin/console doctrine:fixtures:load --env=test
+docker compose exec server php bin/console lexik:jwt:generate-keypair
 
 # Spuštění
 docker compose exec server php bin/phpunit tests/Integration
@@ -328,6 +329,7 @@ Testy odpovídají PHPStan level 8.
 - **API Rate Limiting** - omezení počtu požadavků
 - **Pagination** - stránkování pro seznamy
 - **Error responses** - Samostatná služba zajišťující jednoté error responses
+- **Errog handling** - Lepší error hlášky
 - **Práce s účty** - Schvalování účtů atd.
 - **Logout** - Endpoint po odhlášení
 - **API Documentation** - OpenAPI/Swagger dokumentace
