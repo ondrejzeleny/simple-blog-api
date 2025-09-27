@@ -279,6 +279,7 @@ Po načtení fixtures jsou k dispozici tyto testovací účty:
 
 - **Unit testy** - testují jednotlivé třídy v izolaci s mockováním, lze spustit samostatně
 - **Integrační testy** - testují celé workflow s reálnou databází a fixtures
+- Před spuštěním testů je potřeba provést krok **1. Příprava prostředí**
 
 ### Unit testy
 ```bash
