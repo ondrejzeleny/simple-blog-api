@@ -13,7 +13,8 @@ class ArticleCreateDto
     #[Assert\Length(max: 255)]
     public string $title;
 
-    #[Assert\NotBlank(message: 'Content cannot be blank.')]
+    #[Assert\NotNull(message: 'Missing content.')]
+    #[Assert\Type(type: 'string', message: 'Content must be a string.')]
     public string $content;
 
     /**

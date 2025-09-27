@@ -12,6 +12,7 @@ class ArticleUpdateDto
     #[Assert\Length(max: 255)]
     public ?string $title = null;
 
+    #[Assert\Type(type: 'string', message: 'Content must be a string.')]
     public ?string $content = null;
 
     /**

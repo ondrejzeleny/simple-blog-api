@@ -3,11 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use App\Service\RoleConverter;
+use App\Factory\UserFactoryInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Fixtures for users.
@@ -22,8 +21,7 @@ class UserFixtures extends Fixture
      * Create fixtures.
      */
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly RoleConverter $roleConverter,
+        private readonly UserFactoryInterface $userFactory,
     ) {
     }
 
@@ -35,28 +33,20 @@ class UserFixtures extends Fixture
         $faker = Factory::create('cs_CZ');
 
         // Admin User (password: password1)
-        $admin = new User('Admin User', 'admin@example.com');
-        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'password1'));
-        $admin->setRole($this->roleConverter->toSystemRole('admin'));
+        $admin = $this->userFactory->createFromParameters('Admin User', 'admin@example.com', 'password1', 'admin');
         $manager->persist($admin);
 
         // Author User (password: password2)
-        $author = new User('Author User', 'author@example.com');
-        $author->setPassword($this->passwordHasher->hashPassword($author, 'password2'));
-        $author->setRole($this->roleConverter->toSystemRole('author'));
+        $author = $this->userFactory->createFromParameters('Author User', 'author@example.com', 'password2', 'author');
         $manager->persist($author);
 
         // Reader User (password: password3)
-        $reader = new User('Reader User', 'reader@example.com');
-        $reader->setPassword($this->passwordHasher->hashPassword($reader, 'password3'));
-        $reader->setRole($this->roleConverter->toSystemRole('reader'));
+        $reader = $this->userFactory->createFromParameters('Reader User', 'reader@example.com', 'password3', 'reader');
         $manager->persist($reader);
 
         // Random users (password: password4)
         for ($i = 0; $i < 10; ++$i) {
-            $user = new User($faker->name(), $faker->safeEmail());
-            $user->setPassword($this->passwordHasher->hashPassword($user, 'password4'));
-            $user->setRole($this->roleConverter->toSystemRole('reader'));
+            $user = $this->userFactory->createFromParameters($faker->name(), $faker->safeEmail(), 'password4', 'reader');
             $manager->persist($user);
         }
 

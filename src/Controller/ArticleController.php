@@ -6,6 +6,7 @@ use App\Dto\ArticleCreateDto;
 use App\Dto\ArticleUpdateDto;
 use App\Entity\Article;
 use App\Entity\User;
+use App\Factory\ArticleFactoryInterface;
 use App\Repository\ArticleRepository;
 use App\Security\ArticleVoter;
 use App\Transformer\ArticleTransformer;
@@ -26,6 +27,7 @@ class ArticleController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
         private readonly ArticleTransformer $articleTransformer,
         private readonly ArticleRepository $articleRepository,
+        private readonly ArticleFactoryInterface $articleFactory,
     ) {
     }
 
@@ -67,10 +69,7 @@ class ArticleController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $article = new Article();
-        $article->setTitle($dto->title);
-        $article->setContent($dto->content);
-        $article->setAuthor($user);
+        $article = $this->articleFactory->createFromDto($dto, $user);
 
         $this->entityManager->persist($article);
         $this->entityManager->flush();
@@ -93,21 +92,7 @@ class ArticleController extends AbstractController
         // Authorize if user is the author of the article
         $this->denyAccessUnlessGranted(ArticleVoter::EDIT, $article);
 
-        $isUpdated = false;
-
-        if (!is_null($dto->title)) {
-            $article->setTitle($dto->title);
-            $isUpdated = true;
-        }
-
-        if (!is_null($dto->content)) {
-            $article->setContent($dto->content);
-            $isUpdated = true;
-        }
-
-        if ($isUpdated) {
-            $article->setUpdatedAt(new \DateTimeImmutable());
-        }
+        $article = $this->articleFactory->updateFromDto($article, $dto);
 
         $this->entityManager->flush();
 

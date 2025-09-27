@@ -20,8 +20,8 @@ class Article
     #[ORM\Column(length: 255)]
     private string $title;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $content = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private string $content = '';
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -33,8 +33,10 @@ class Article
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function __construct()
+    public function __construct(string $title, User $author)
     {
+        $this->title = $title;
+        $this->author = $author;
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -67,7 +69,7 @@ class Article
     /**
      * Get article content.
      */
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -75,7 +77,7 @@ class Article
     /**
      * Set article content.
      */
-    public function setContent(?string $content): static
+    public function setContent(string $content): static
     {
         $this->content = $content;
 

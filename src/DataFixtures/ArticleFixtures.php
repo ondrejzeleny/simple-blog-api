@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Article;
 use App\Entity\User;
+use App\Factory\ArticleFactoryInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -14,6 +15,14 @@ use Faker\Factory;
  */
 class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
+    /**
+     * Create fixtures.
+     */
+    public function __construct(
+        private readonly ArticleFactoryInterface $articleFactory,
+    ) {
+    }
+
     /**
      * Load article fixtures.
      */
@@ -26,19 +35,13 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
 
         // Admin articles
         for ($i = 0; $i < 5; ++$i) {
-            $article = new Article();
-            $article->setTitle($faker->sentence(6));
-            $article->setContent($faker->paragraph());
-            $article->setAuthor($adminUser);
+            $article = $this->articleFactory->createFromParameters($faker->sentence(6), $faker->paragraph(), $adminUser);
             $manager->persist($article);
         }
 
         // Author articles
         for ($i = 0; $i < 5; ++$i) {
-            $article = new Article();
-            $article->setTitle($faker->sentence(6));
-            $article->setContent($faker->paragraph());
-            $article->setAuthor($authorUser);
+            $article = $this->articleFactory->createFromParameters($faker->sentence(6), $faker->paragraph(), $authorUser);
             $manager->persist($article);
         }
 

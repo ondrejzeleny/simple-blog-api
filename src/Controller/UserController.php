@@ -5,15 +5,14 @@ namespace App\Controller;
 use App\Dto\UserCreateDto;
 use App\Dto\UserUpdateDto;
 use App\Entity\User;
+use App\Factory\UserFactoryInterface;
 use App\Repository\UserRepository;
-use App\Service\RoleConverter;
 use App\Transformer\UserTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -25,9 +24,8 @@ class UserController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly UserTransformer $userTransformer,
-        private readonly RoleConverter $roleConverter,
-        private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly UserRepository $userRepository,
+        private readonly UserFactoryInterface $userFactory,
     ) {
     }
 
@@ -67,9 +65,7 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function create(#[MapRequestPayload] UserCreateDto $dto): JsonResponse
     {
-        $user = new User($dto->name, $dto->email);
-        $user->setRole($this->roleConverter->toSystemRole($dto->role));
-        $user->setPassword($this->passwordHasher->hashPassword($user, $dto->password));
+        $user = $this->userFactory->createFromDto($dto);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -90,17 +86,7 @@ class UserController extends AbstractController
             return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        if (!is_null($dto->name)) {
-            $user->setName($dto->name);
-        }
-
-        if (!is_null($dto->email)) {
-            $user->setEmail($dto->email);
-        }
-
-        if (!is_null($dto->role)) {
-            $user->setRole($this->roleConverter->toSystemRole($dto->role));
-        }
+        $user = $this->userFactory->updateFromDto($user, $dto);
 
         $this->entityManager->flush();
 
