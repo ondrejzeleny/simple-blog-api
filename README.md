@@ -277,24 +277,24 @@ Po načtení fixtures jsou k dispozici tyto testovací účty:
 
 ## Testy
 
-### Příprava testovacího prostředí
+- **Unit testy** - testují jednotlivé třídy v izolaci s mockováním, lze spustit samostatně
+- **Integrační testy** - testují celé workflow s reálnou databází a fixtures
+
+### Unit testy
 ```bash
-# Vytvořte testovací databázi
-docker compose exec server php bin/console doctrine:database:create --env=test
-
-# Vygenerujte schéma
-docker compose exec server php bin/console doctrine:schema:create --env=test
-
-# Načtěte testovací data
-docker compose exec server php bin/console doctrine:fixtures:load --env=test
+# Spuštění
+docker compose run --build --rm server php bin/phpunit tests/Unit
 ```
 
-### Spuštění testů
+### Integrační testy
 ```bash
-# Spusťte všechny Unit testy
-docker compose exec server php bin/phpunit tests/Unit
+# Příprava
+docker compose up -d --build
+docker compose exec server php bin/console doctrine:database:create --env=test
+docker compose exec server php bin/console doctrine:schema:create --env=test
+docker compose exec server php bin/console doctrine:fixtures:load --env=test
 
-# Spusťte všechny Integrační testy
+# Spuštění
 docker compose exec server php bin/phpunit tests/Integration
 ```
 
@@ -304,11 +304,13 @@ docker compose exec server php bin/phpunit tests/Integration
 ```bash
 # Spuštění PHPStan level 10
 docker compose exec server php ./vendor/bin/phpstan analyse src --level 10
+
 # Testy splňují PHPStan level 8
 docker compose exec server php ./vendor/bin/phpstan analyse tests --level 8
 ```
 
-Aplikace odpovídá PHPStan level 10 bez chyb.
+Aplikace odpovídá PHPStan level 10.
+Testy odpovídají PHPStan level 8.
 
 ## Technologie
 
@@ -326,4 +328,5 @@ Aplikace odpovídá PHPStan level 10 bez chyb.
 - **Pagination** - stránkování pro seznamy
 - **API Documentation** - OpenAPI/Swagger dokumentace
 - **Caching** - Redis cache pro výkon
+- **Logout** - Endpoint po odhlášení
 - **Produkce** - příprava na spuštění v produkci
