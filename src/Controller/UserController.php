@@ -44,7 +44,7 @@ class UserController extends AbstractController
     /**
      * Get single user.
      */
-    #[Route('/users/{id}', name: 'api_user_show', methods: ['GET'])]
+    #[Route('/users/{id}', name: 'api_user_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
     public function show(int $id): JsonResponse
     {
@@ -64,18 +64,22 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function create(#[MapRequestPayload] UserCreateDto $dto): JsonResponse
     {
-        $user = $this->userFactory->createFromDto($dto);
+        try {
+            $user = $this->userFactory->createFromDto($dto);
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
 
-        return $this->json($this->userTransformer->transform($user), Response::HTTP_CREATED);
+            return $this->json($this->userTransformer->transform($user), Response::HTTP_CREATED);
+        } catch (\InvalidArgumentException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_CONFLICT);
+        }
     }
 
     /**
      * Update user.
      */
-    #[Route('/users/{id}', name: 'api_user_update', methods: ['PUT'])]
+    #[Route('/users/{id}', name: 'api_user_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(int $id, #[MapRequestPayload] UserUpdateDto $dto): JsonResponse
     {
@@ -85,17 +89,21 @@ class UserController extends AbstractController
             return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        $user = $this->userFactory->updateFromDto($user, $dto);
+        try {
+            $user = $this->userFactory->updateFromDto($user, $dto);
 
-        $this->entityManager->flush();
+            $this->entityManager->flush();
 
-        return $this->json($this->userTransformer->transform($user));
+            return $this->json($this->userTransformer->transform($user));
+        } catch (\InvalidArgumentException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_CONFLICT);
+        }
     }
 
     /**
      * Delete user.
      */
-    #[Route('/users/{id}', name: 'api_user_delete', methods: ['DELETE'])]
+    #[Route('/users/{id}', name: 'api_user_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id): JsonResponse
     {

@@ -46,7 +46,7 @@ class ArticleController extends AbstractController
     /**
      * Get single article.
      */
-    #[Route('/articles/{id}', name: 'api_article_show', methods: ['GET'])]
+    #[Route('/articles/{id}', name: 'api_article_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_READER')]
     public function show(int $id): JsonResponse
     {
@@ -79,7 +79,7 @@ class ArticleController extends AbstractController
     /**
      * Update article.
      */
-    #[Route('/articles/{id}', name: 'api_article_update', methods: ['PUT'])]
+    #[Route('/articles/{id}', name: 'api_article_update', methods: ['PUT'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_AUTHOR')]
     public function update(int $id, #[MapRequestPayload] ArticleUpdateDto $dto): JsonResponse
     {
@@ -101,7 +101,7 @@ class ArticleController extends AbstractController
     /**
      * Delete article.
      */
-    #[Route('/articles/{id}', name: 'api_article_delete', methods: ['DELETE'])]
+    #[Route('/articles/{id}', name: 'api_article_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_AUTHOR')]
     public function delete(int $id): JsonResponse
     {
