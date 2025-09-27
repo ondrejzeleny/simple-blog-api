@@ -1,6 +1,6 @@
 # Simple Blog API
 
-REST API pro správu blogu postavené na Symfony frameworku s Doctrine ORM. Aplikace poskytuje kompletní CRUD operace pro články a uživatele s role-based přístupem.
+REST API pro správu blogu postavené na Symfony frameworku s Doctrine ORM. Aplikace poskytuje CRUD operace pro články a uživatele s jednoduchým role-based přístupem.
 
 ## Funkce
 - **Autentizace a autorizace** - JWT token based autentizace s role-based přístupem
