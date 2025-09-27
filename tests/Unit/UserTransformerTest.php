@@ -7,6 +7,9 @@ use App\Service\RoleConverter;
 use App\Transformer\UserTransformer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for UserTransformer.
+ */
 class UserTransformerTest extends TestCase
 {
     private UserTransformer $transformer;
@@ -17,6 +20,9 @@ class UserTransformerTest extends TestCase
         $this->transformer = new UserTransformer($roleConverter);
     }
 
+    /**
+     * Test transforming user to array.
+     */
     public function testTransformUser(): void
     {
         // Arrange
@@ -40,6 +46,9 @@ class UserTransformerTest extends TestCase
         $this->assertEquals($expectedArray, $result);
     }
 
+    /**
+     * Test transforming user with admin role.
+     */
     public function testTransformUserWithAdminRole(): void
     {
         // Arrange
@@ -53,6 +62,9 @@ class UserTransformerTest extends TestCase
         $this->assertEquals('admin', $result['role']);
     }
 
+    /**
+     * Test transforming user with reader role.
+     */
     public function testTransformUserWithReaderRole(): void
     {
         // Arrange
@@ -66,6 +78,9 @@ class UserTransformerTest extends TestCase
         $this->assertEquals('reader', $result['role']);
     }
 
+    /**
+     * Test transforming invalid entity throws exception.
+     */
     public function testTransformWithInvalidEntity(): void
     {
         // Arrange
@@ -79,6 +94,9 @@ class UserTransformerTest extends TestCase
         // Assert - exception is thrown
     }
 
+    /**
+     * Test transforming null entity throws exception.
+     */
     public function testTransformWithNullEntity(): void
     {
         // Arrange

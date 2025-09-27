@@ -6,6 +6,9 @@ use App\Exception\InvalidRoleException;
 use App\Service\RoleConverter;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for RoleConverter.
+ */
 class RoleConverterTest extends TestCase
 {
     private RoleConverter $roleConverter;
@@ -15,6 +18,9 @@ class RoleConverterTest extends TestCase
         $this->roleConverter = new RoleConverter();
     }
 
+    /**
+     * Test converting valid pretty roles to system roles.
+     */
     public function testToSystemRoleWithValidRoles(): void
     {
         // Arrange
@@ -32,6 +38,9 @@ class RoleConverterTest extends TestCase
         }
     }
 
+    /**
+     * Test that role conversion is case insensitive.
+     */
     public function testToSystemRoleIsCaseInsensitive(): void
     {
         // Arrange
@@ -49,6 +58,9 @@ class RoleConverterTest extends TestCase
         }
     }
 
+    /**
+     * Test converting invalid role throws exception.
+     */
     public function testToSystemRoleWithInvalidRole(): void
     {
         // Arrange
@@ -62,6 +74,9 @@ class RoleConverterTest extends TestCase
         // Assert - exception is thrown
     }
 
+    /**
+     * Test converting valid system roles to pretty roles.
+     */
     public function testToPrettyRoleWithValidRoles(): void
     {
         // Arrange
@@ -79,6 +94,9 @@ class RoleConverterTest extends TestCase
         }
     }
 
+    /**
+     * Test that pretty role conversion is case insensitive.
+     */
     public function testToPrettyRoleIsCaseInsensitive(): void
     {
         // Arrange
@@ -96,6 +114,9 @@ class RoleConverterTest extends TestCase
         }
     }
 
+    /**
+     * Test converting invalid system role throws exception.
+     */
     public function testToPrettyRoleWithInvalidRole(): void
     {
         // Arrange

@@ -7,6 +7,9 @@ use App\Entity\User;
 use App\Transformer\ArticleTransformer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for ArticleTransformer.
+ */
 class ArticleTransformerTest extends TestCase
 {
     private ArticleTransformer $transformer;
@@ -16,6 +19,9 @@ class ArticleTransformerTest extends TestCase
         $this->transformer = new ArticleTransformer();
     }
 
+    /**
+     * Test transforming article to array.
+     */
     public function testTransformArticle(): void
     {
         // Arrange
@@ -46,6 +52,9 @@ class ArticleTransformerTest extends TestCase
         $this->assertEquals($expectedArray, $result);
     }
 
+    /**
+     * Test transforming article with null updated_at.
+     */
     public function testTransformArticleWithNullUpdatedAt(): void
     {
         // Arrange
@@ -67,6 +76,9 @@ class ArticleTransformerTest extends TestCase
         $this->assertNull($result['updated_at']);
     }
 
+    /**
+     * Test transforming invalid entity throws exception.
+     */
     public function testTransformWithInvalidEntity(): void
     {
         // Arrange
@@ -80,6 +92,9 @@ class ArticleTransformerTest extends TestCase
         // Assert - exception is thrown
     }
 
+    /**
+     * Test transforming null entity throws exception.
+     */
     public function testTransformWithNullEntity(): void
     {
         // Arrange

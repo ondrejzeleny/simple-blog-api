@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Dto\ArticleCreateDto;
 use App\Dto\ArticleUpdateDto;
-use App\Entity\Article;
 use App\Entity\User;
 use App\Factory\ArticleFactoryInterface;
 use App\Repository\ArticleRepository;

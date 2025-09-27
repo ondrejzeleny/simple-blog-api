@@ -326,7 +326,7 @@ Testy odpovídají PHPStan level 8.
 
 - **API Rate Limiting** - omezení počtu požadavků
 - **Pagination** - stránkování pro seznamy
-- **API Documentation** - OpenAPI/Swagger dokumentace
-- **Caching** - Redis cache pro výkon
+- **Error responses** - Samostatná služba zajišťující jednoté error responses
 - **Logout** - Endpoint po odhlášení
+- **API Documentation** - OpenAPI/Swagger dokumentace
 - **Produkce** - příprava na spuštění v produkci

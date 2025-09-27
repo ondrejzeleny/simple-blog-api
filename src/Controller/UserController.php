@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Dto\UserCreateDto;
 use App\Dto\UserUpdateDto;
-use App\Entity\User;
 use App\Factory\UserFactoryInterface;
 use App\Repository\UserRepository;
 use App\Transformer\UserTransformer;
@@ -34,9 +33,9 @@ class UserController extends AbstractController
      */
     #[Route('/users', name: 'api_user_index', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(UserRepository $userRepository): JsonResponse
+    public function index(): JsonResponse
     {
-        $users = $userRepository->findAll();
+        $users = $this->userRepository->findAll();
         $data = array_map([$this->userTransformer, 'transform'], $users);
 
         return $this->json($data);

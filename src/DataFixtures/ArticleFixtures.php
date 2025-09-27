@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Article;
 use App\Entity\User;
 use App\Factory\ArticleFactoryInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
