@@ -315,7 +315,6 @@ Aplikace odpovídá PHPStan level 10.
 Testy odpovídají PHPStan level 8.
 
 ## Technologie
-
 - **Framework**: Symfony 7.x
 - **ORM**: Doctrine ORM
 - **Autentizace**: JWT (LexikJWTAuthenticationBundle)
@@ -332,3 +331,7 @@ Testy odpovídají PHPStan level 8.
 - **API Rate Limiting** - omezení počtu požadavků
 - **Pagination** - stránkování pro seznamy, pro větší množství dat
 - **Produkce** - příprava na spuštění v produkci
+
+## Poznámky
+- Pro Symfony konzistenci jsem ponechal název **password** místo **password_hash**
+
