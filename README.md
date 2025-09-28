@@ -324,7 +324,6 @@ Testy odpovídají PHPStan level 8.
 - **Kontejnerizace**: Docker + Docker Compose
 
 ## Možná vylepšení
-- **Enum role** - oddělit role do Enumu a s tím související refactoring
 - **Error responses** - samostatná služba zajišťující jednoté error responses
 - **Errog handling** - lepší a jednoznačnější error hlášky
 - **Práce s účty** - schvalování účtů, logout endpoint atd.
@@ -334,4 +333,4 @@ Testy odpovídají PHPStan level 8.
 
 ## Poznámky
 - Pro Symfony konzistenci jsem ponechal název **password** místo **password_hash**
-
+- Potenciálně by šlo oddělit role do Enumu (v Symfony to není běžnou praxí)

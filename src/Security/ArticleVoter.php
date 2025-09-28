@@ -4,7 +4,6 @@ namespace App\Security;
 
 use App\Entity\Article;
 use App\Entity\User;
-use App\Service\RoleConverter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -64,7 +63,7 @@ class ArticleVoter extends Voter
      */
     private function canEdit(TokenInterface $token, Article $article, User $user): bool
     {
-        if ($this->accessDecisionManager->decide($token, [RoleConverter::ROLE_ADMIN])) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

@@ -120,6 +120,6 @@ class UserController extends AbstractController
         $this->entityManager->remove($user);
         $this->entityManager->flush();
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }

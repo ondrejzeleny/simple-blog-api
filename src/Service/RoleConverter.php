@@ -9,9 +9,9 @@ use App\Exception\InvalidRoleException;
  */
 class RoleConverter
 {
-    public const ROLE_ADMIN = 'ROLE_ADMIN';
-    public const ROLE_AUTHOR = 'ROLE_AUTHOR';
-    public const ROLE_READER = 'ROLE_READER';
+    private const ROLE_ADMIN = 'ROLE_ADMIN';
+    private const ROLE_AUTHOR = 'ROLE_AUTHOR';
+    private const ROLE_READER = 'ROLE_READER';
 
     /**
      * Convert pretty role to system role.

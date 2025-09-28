@@ -116,6 +116,6 @@ class ArticleController extends AbstractController
         $this->entityManager->remove($article);
         $this->entityManager->flush();
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }
